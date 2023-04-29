@@ -1,0 +1,25 @@
+{
+  "imports": {
+    // std
+    "dotenv/": "https://deno.land/std@0.185.0/dotenv/",
+    "fmt/": "https://deno.land/std@0.185.0/fmt/",
+    "fs/": "https://deno.land/std@0.185.0/fs/",
+    "path": "https://deno.land/std@0.185.0/path/mod.ts",
+    // 3rd party
+    "Cliffy": "https://deno.land/x/cliffy@v0.25.7/mod.ts",
+    "Lodash": "https://cdn.skypack.dev/lodash@v4.17.21?dts",
+    "OpenAI": "https://deno.land/x/openai@1.3.1/mod.ts",
+    "Progress": "https://deno.land/x/progress@v1.3.8/mod.ts",
+    "Tokenizer": "https://deno.land/x/gpt_2_3_tokenizer@v0.0.2/mod.js",
+    // local
+    "#config/": "./src/config/",
+    "#utils/": "./src/utils/",
+    "#types.ts": "./src/types.ts"
+  },
+  "tasks": {
+    "main": "deno run --allow-read --allow-write --allow-env --allow-net=\"api.openai.com\" src/main.ts",
+    "format": "deno fmt",
+    "check": "deno check src/**/*.ts",
+    "build": "deno compile --allow-read --allow-write --allow-env --allow-net=\"api.openai.com\" --output=\"./.build/testbench\" src/main.ts"
+  }
+}
