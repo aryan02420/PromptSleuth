@@ -1,6 +1,5 @@
 import { z } from "Zod";
 import { stringID } from "#utils/stringID.ts";
-import { convertMessagesToPrompt } from "#utils/convertMessagesToPrompt.ts";
 import { Config } from "#types.ts";
 
 const configSchema = z.object({
@@ -35,10 +34,10 @@ function validateConfig(config: unknown): PartialConfig {
 
 async function getRequiredConfig(config: PartialConfig): Promise<Config> {
   for (const prompt of config.prompts) {
-    prompt.id ??= await stringID(convertMessagesToPrompt(prompt.messages));
+    prompt.id ??= await stringID(JSON.stringify(prompt));
   }
   for (const input of config.inputs) {
-    input.id ??= await stringID(input.fields.join("\\"));
+    input.id ??= await stringID(JSON.stringify(input));
   }
   delete config.$schema;
   // FIXME: remove typecast
@@ -57,7 +56,8 @@ if (import.meta.main) {
   const { zodToJsonSchema } = await import("ZodToJsonSchema");
   const { writeJSON } = await import("#utils/writeJSON.ts");
 
-  // @ts-ignore super deep type makes editor slow :(
+  // FIXME: super deep type makes editor slow :(
+  // @ts-ignore
   // deno-lint-ignore no-explicit-any
   const data: any = zodToJsonSchema(configSchema);
   const basePath = dirname(fromFileUrl(import.meta.url));

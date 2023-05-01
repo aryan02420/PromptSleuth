@@ -22,7 +22,7 @@
   },
   "tasks": {
     "main": "deno run --allow-read --allow-write --allow-env --allow-net=\"api.openai.com\" src/main.ts",
-    "inspector": "deno run --allow-read --allow-write src/monitor.ts",
+    "inspector": "deno run --allow-read --allow-write --allow-net=\"deno.land\" src/monitor.ts",
     "format": "deno fmt",
     "check": "deno check src/**/*.ts",
     "build": "deno compile --allow-read --allow-write --allow-env --allow-net=\"api.openai.com\" --output=\"./.build/testbench\" src/main.ts",

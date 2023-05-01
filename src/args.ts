@@ -5,8 +5,7 @@ const argSchema = z.object({
   _: z.array(z.string()),
   help: z.boolean().optional(),
   version: z.boolean().optional(),
-  config: z.string().optional(),
-  inspect: z.string().optional(),
+  outDir: z.string().optional(),
 });
 
 type Args = z.infer<typeof argSchema>;

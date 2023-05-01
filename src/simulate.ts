@@ -22,13 +22,17 @@ export async function simulateChatCompletion(
   const completionRequestsChunks = chunk(allCompletionRequests, 6);
   const allReports: Result[] = [];
 
+  console.clear();
   const progress = new ProgressBar({
     title: "Simulating chat completion",
     total: completionRequestsChunks.length,
   });
 
   for (const [i, chunk] of entries(completionRequestsChunks)) {
-    progress.render(+i + 1);
+    const interval = setInterval(() => {
+      progress.render(+i);
+    }, 100);
+
     const reports = (await Promise.allSettled(
       chunk.map(async ({ prompt, input, repeat }) => {
         return probeChatCompletion(
@@ -41,11 +45,12 @@ export async function simulateChatCompletion(
       }
       return acc;
     }, []);
-  
+
     allReports.push(...reports);
+    clearInterval(interval);
   }
 
-  progress.end();
+  progress.render(completionRequestsChunks.length);
 
   return allReports;
 }
