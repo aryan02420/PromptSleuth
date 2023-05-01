@@ -36,7 +36,7 @@ export async function monitor(
           ],
           ["Input", new Cell(result.input.text).border(true)],
           ["Output", new Cell(result.output.text).border(true)],
-          ["Characters", result.metadata.characters],
+          ...chain(result.metadata).entries().map(([key, value]) => [key, value.toString()]).value()
         ])
         .padding(1)
         .indent(2)
@@ -70,7 +70,6 @@ export async function monitor(
           ],
           ["Input", new Cell(result.input.text).border(true)],
           ["Output", new Cell(result.output.text).border(true)],
-          ["Characters", result.metadata.characters],
         ])
         .padding(1)
         .indent(2)
@@ -104,7 +103,7 @@ export async function monitor(
       counts: countBy(actionList, "action"),
     }))
     .entries()
-    .sortBy(([_, { counts }]) => counts[MonitorActions.LooksGood])
+    .sortBy(([_, { counts }]) => -counts[MonitorActions.LooksGood])
     .value();
 
   writeJSON(`${outDir}/results_easy.json`, allCounts, {

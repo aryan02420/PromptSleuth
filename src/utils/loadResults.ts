@@ -18,6 +18,8 @@ const resultsSchema = z.array(z.object({
   metadata: z.object({
     tokens: z.number(),
     characters: z.number(),
+    lengthExceeded: z.boolean(),
+    moderated: z.boolean(),
   }),
 }));
 

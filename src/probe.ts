@@ -25,6 +25,8 @@ export function probeChatCompletion(
       tokens: data.completion.usage.total_tokens,
       // FIXME: remove non null assertion
       characters: data.completion.choices.at(0)!.message.content.length,
+      lengthExceeded: data.completion.choices.at(0)!.finish_reason === "length",
+      moderated: /as an ai language model/i.test(data.completion.choices.at(0)!.message.content)
     },
   };
 }

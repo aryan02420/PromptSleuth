@@ -12,11 +12,12 @@ const configSchema = z.object({
       content: z.string(),
     })),
     params: z.object({
-      maxTokens: z.number().int().min(1).max(2048),
-      temperature: z.number().min(0).max(1),
-      topP: z.number().min(0).max(1),
-      frequencyPenalty: z.number().min(0).max(2),
-      presencePenalty: z.number().min(0).max(2),
+      maxTokens: z.number().int().min(1).max(2048).optional(),
+      temperature: z.number().min(0).max(1).optional(),
+      topP: z.number().min(0).max(1).optional(),
+      frequencyPenalty: z.number().min(0).max(2).optional(),
+      presencePenalty: z.number().min(0).max(2).optional(),
+      stop: z.union([z.string(), z.array(z.string())]).optional(),
     }),
   })),
   inputs: z.array(z.object({
@@ -57,7 +58,7 @@ if (import.meta.main) {
   const { writeJSON } = await import("#utils/writeJSON.ts");
 
   // FIXME: super deep type makes editor slow :(
-  // @ts-ignore
+  // @ts-ignore ^reason
   // deno-lint-ignore no-explicit-any
   const data: any = zodToJsonSchema(configSchema);
   const basePath = dirname(fromFileUrl(import.meta.url));

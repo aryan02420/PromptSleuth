@@ -66,15 +66,21 @@
                 "type": "number",
                 "minimum": 0,
                 "maximum": 2
+              },
+              "stop": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                ]
               }
             },
-            "required": [
-              "maxTokens",
-              "temperature",
-              "topP",
-              "frequencyPenalty",
-              "presencePenalty"
-            ],
             "additionalProperties": false
           }
         },

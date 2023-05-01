@@ -7,11 +7,10 @@ export type CommonParams =
   | "temperature"
   | "topP"
   | "frequencyPenalty"
-  | "presencePenalty";
+  | "presencePenalty"
+  | "stop";
 
-export type ChatCompletionParams = Required<
-  Pick<ChatCompletionOptions, CommonParams>
->;
+export type ChatCompletionParams = Pick<ChatCompletionOptions, CommonParams>
 
 export type CompletionOptionPrompt = string;
 
@@ -63,5 +62,7 @@ export type Result = {
   metadata: {
     tokens: number;
     characters: number;
+    lengthExceeded: boolean;
+    moderated: boolean;
   };
 };

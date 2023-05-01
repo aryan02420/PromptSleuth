@@ -1,5 +1,5 @@
 import ProgressBar from "Progress";
-import { chunk, entries } from "Lodash";
+import { chunk } from "Lodash";
 import { driveChatCompletion } from "./drive.ts";
 import { probeChatCompletion } from "./probe.ts";
 import { Input, Prompt, Result } from "#types.ts";
@@ -24,20 +24,25 @@ export async function simulateChatCompletion(
 
   console.clear();
   const progress = new ProgressBar({
-    title: "Simulating chat completion",
-    total: completionRequestsChunks.length,
+    title: `Simulating ${allCompletionRequests.length} chat completions`,
+    total: allCompletionRequests.length,
   });
+  let completed = 0;
 
-  for (const [i, chunk] of entries(completionRequestsChunks)) {
-    const interval = setInterval(() => {
-      progress.render(+i);
-    }, 100);
+  function updateProgress() {
+    progress.render(completed);
+  }
+
+  for (const chunk of completionRequestsChunks) {
+    const interval = setInterval(updateProgress, 100);
 
     const reports = (await Promise.allSettled(
       chunk.map(async ({ prompt, input, repeat }) => {
-        return probeChatCompletion(
-          await driveChatCompletion(prompt, input, repeat),
-        );
+        const output = await driveChatCompletion(prompt, input, repeat)
+        const result = probeChatCompletion(output);
+        completed++;
+        updateProgress();
+        return result;
       }),
     )).reduce<Result[]>((acc, result) => {
       if (result.status === "fulfilled") {
@@ -50,7 +55,7 @@ export async function simulateChatCompletion(
     clearInterval(interval);
   }
 
-  progress.render(completionRequestsChunks.length);
+  updateProgress();
 
   return allReports;
 }
