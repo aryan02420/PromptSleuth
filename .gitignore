@@ -131,3 +131,7 @@ dist
 
 # Output
 .build
+
+# Mac OS specific
+.DS_Store
+._*

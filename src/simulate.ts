@@ -1,90 +1,51 @@
-import ProgressBar from "Progress"
-import { driveChatCompletion, driveCompletion } from "./drive.ts";
-import { probeChatCompletion, probeCompletion } from "./probe.ts";
-import {
-  ChatCompletionTaskOptions,
-  CompletionProbeResult,
-  CompletionTaskOptions,
-  UserInput,
-} from "#types.ts";
-
-export async function simulateCompletion(
-  completionTaskOptions: CompletionTaskOptions[],
-  inputs: UserInput[],
-  repeat: number,
-): Promise<CompletionProbeResult[]> {
-  const allCompletionRequests = completionTaskOptions.flatMap(
-    ({ prompt, params }) => {
-      return inputs.flatMap((input) => {
-        return Array.from({ length: repeat }).fill(null).map((_, index) => {
-          return { prompt, input, params, index };
-        });
-      });
-    },
-  );
-
-  const progressBar = new ProgressBar({
-    title: 'Generating completions',
-    complete: "#",
-    incomplete: "-",
-    display: "[:bar] :text :percent :time :completed/:total",
-    total: allCompletionRequests.length,
-  });
-  progressBar.render(0);
-
-  const allReports = (await Promise.allSettled(
-    allCompletionRequests.map(async ({ prompt, input, params, index }) => {
-      progressBar.render(index + 1);
-      return probeCompletion(await driveCompletion(prompt, input, params, index))
-  }),
-  )).reduce<CompletionProbeResult[]>((acc, result) => {
-    if (result.status === "fulfilled") {
-      acc.push(result.value);
-    }
-    return acc;
-  }, []);
-
-  return allReports;
-}
+import ProgressBar from "Progress";
+import { chunk, entries } from "Lodash";
+import { driveChatCompletion } from "./drive.ts";
+import { probeChatCompletion } from "./probe.ts";
+import { Input, Prompt, Result } from "#types.ts";
 
 export async function simulateChatCompletion(
-  completionTaskOptions: ChatCompletionTaskOptions[],
-  inputs: UserInput[],
+  prompts: Prompt[],
+  inputs: Input[],
   repeat: number,
-): Promise<CompletionProbeResult[]> {
-  const allCompletionRequests = completionTaskOptions.flatMap(
-    ({ messages, params }) => {
+): Promise<Result[]> {
+  const allCompletionRequests = prompts.flatMap(
+    (prompt) => {
       return inputs.flatMap((input) => {
         return Array.from({ length: repeat }).fill(null).map((_, index) => {
-          return { messages, input, params, index };
+          return { prompt, input, repeat: index };
         });
       });
     },
   );
 
-  // const progressBar = new ProgressBar({
-  //   title: 'Generating completions',
-  //   complete: "#",
-  //   incomplete: "-",
-  //   display: "[:bar] :text :percent :time :completed/:total",
-  //   total: allCompletionRequests.length,
-  // });
-  // progressBar.render(0);
+  const completionRequestsChunks = chunk(allCompletionRequests, 6);
+  const allReports: Result[] = [];
 
-  const allReports = (await Promise.allSettled(
-    allCompletionRequests.map(async ({ messages, input, params, index }) => {
-      // progressBar.render(index + 1);
-      console.log(`Generating completion ${index + 1} of ${allCompletionRequests.length}`);
-      return probeChatCompletion(
-        await driveChatCompletion(messages, input, params, index),
-      )
-    }),
-  )).reduce<CompletionProbeResult[]>((acc, result) => {
-    if (result.status === "fulfilled") {
-      acc.push(result.value);
-    }
-    return acc;
-  }, []);
+  const progress = new ProgressBar({
+    title: "Simulating chat completion",
+    total: completionRequestsChunks.length,
+  });
+
+  for (const [i, chunk] of entries(completionRequestsChunks)) {
+    progress.render(+i + 1);
+    const reports = (await Promise.allSettled(
+      chunk.map(async ({ prompt, input, repeat }) => {
+        return probeChatCompletion(
+          await driveChatCompletion(prompt, input, repeat),
+        );
+      }),
+    )).reduce<Result[]>((acc, result) => {
+      if (result.status === "fulfilled") {
+        acc.push(result.value);
+      }
+      return acc;
+    }, []);
+  
+    allReports.push(...reports);
+  }
+
+  progress.end();
 
   return allReports;
 }

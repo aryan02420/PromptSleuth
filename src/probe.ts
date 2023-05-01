@@ -1,33 +1,30 @@
-import {
-  ChatCompletionWithMetadata,
-  CompletionProbeResult,
-  CompletionWithMetadata,
-} from "#types.ts";
-
-export function probeCompletion(
-  data: CompletionWithMetadata,
-): CompletionProbeResult {
-  const { metadata: { promptId, inputId, repeat, userInput } } = data;
-
-  return {
-    id: `${promptId}-${inputId}-${repeat}`,
-    input: userInput.join("\\"),
-    // FIXME: remove non null assertion
-    output: data.completion.choices.at(0)!.text,
-    tokens: data.completion.usage.total_tokens,
-  };
-}
+import { convertMessagesToPrompt } from "#utils/convertMessagesToPrompt.ts";
+import { Output, Result } from "#types.ts";
 
 export function probeChatCompletion(
-  data: ChatCompletionWithMetadata,
-): CompletionProbeResult {
-  const { metadata: { messageId, inputId, repeat, userInput } } = data;
+  data: Output,
+): Result {
+  const { metadata: { prompt, input, repeat } } = data;
 
   return {
-    id: `${messageId}-${inputId}-${repeat}`,
-    input: userInput.join("\\"),
-    // FIXME: remove non null assertion
-    output: data.completion.choices.at(0)!.message.content,
-    tokens: data.completion.usage.total_tokens,
+    id: `${prompt.id}-${input.id}-${repeat}`,
+    input: {
+      id: input.id,
+      text: input.fields.join("\\"),
+    },
+    output: {
+      id: data.id,
+      // FIXME: remove non null assertion
+      text: data.completion.choices.at(0)!.message.content,
+    },
+    prompt: {
+      id: prompt.id,
+      text: convertMessagesToPrompt(prompt.messages),
+    },
+    metadata: {
+      tokens: data.completion.usage.total_tokens,
+      // FIXME: remove non null assertion
+      characters: data.completion.choices.at(0)!.message.content.length,
+    },
   };
 }

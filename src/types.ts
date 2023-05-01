@@ -1,12 +1,6 @@
-import {
-  ChatCompletion,
-  ChatCompletionOptions,
-  Completion,
-  CompletionOptions,
-} from "OpenAI";
+import { ChatCompletion, ChatCompletionOptions } from "OpenAI";
 
-// deno-lint-ignore no-explicit-any
-export type UserInput = any[];
+export type UserInput = string[];
 
 export type CommonParams =
   | "maxTokens"
@@ -14,8 +8,6 @@ export type CommonParams =
   | "topP"
   | "frequencyPenalty"
   | "presencePenalty";
-
-export type CompletionParams = Required<Pick<CompletionOptions, CommonParams>>;
 
 export type ChatCompletionParams = Required<
   Pick<ChatCompletionOptions, CommonParams>
@@ -26,59 +18,50 @@ export type CompletionOptionPrompt = string;
 export type ChatCompletionOptionMessage =
   ChatCompletionOptions["messages"][number];
 
-export type CompletionWithMetadata = {
-  promptWithUserInput: CompletionOptionPrompt;
-  options: CompletionParams;
-  completion: Completion;
-  metadata: {
-    prompt: CompletionOptionPrompt;
-    userInput: UserInput;
-    promptId: string;
-    inputId: string;
-    repeat: number;
-  };
-};
-
-export type ChatCompletionWithMetadata = {
-  messagesWithUserInput: ChatCompletionOptionMessage[];
-  options: ChatCompletionParams;
-  completion: ChatCompletion;
-  metadata: {
-    messages: ChatCompletionOptionMessage[];
-    userInput: UserInput;
-    messageId: string;
-    inputId: string;
-    repeat: number;
-  };
-};
-
-export type CompletionTaskOptions = {
-  prompt: CompletionOptionPrompt;
-  params: CompletionParams;
-};
-
-export type ChatCompletionTaskOptions = {
+export type Prompt = {
+  id: string;
   messages: ChatCompletionOptionMessage[];
   params: ChatCompletionParams;
 };
 
-export type CompletionProbeResult = {
+export type Input = {
   id: string;
-  input: string;
-  output: string;
-  tokens: number;
+  fields: string[];
 };
 
-export type CompletionConfig = {
-  id: string;
-  prompt: CompletionTaskOptions[];
-  inputs: UserInput[];
+export type Config = {
+  name: string;
+  prompts: Prompt[];
+  inputs: Input[];
   repeats: number;
 };
 
-export type ChatCompletionConfig = {
+export type Output = {
   id: string;
-  messages: ChatCompletionTaskOptions[];
-  inputs: UserInput[];
-  repeats: number;
+  completion: ChatCompletion;
+  metadata: {
+    prompt: Prompt;
+    input: Input;
+    repeat: number;
+  };
+};
+
+export type Result = {
+  id: string;
+  input: {
+    id: string;
+    text: string;
+  };
+  output: {
+    id: string;
+    text: string;
+  };
+  prompt: {
+    id: string;
+    text: string;
+  };
+  metadata: {
+    tokens: number;
+    characters: number;
+  };
 };
