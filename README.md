@@ -12,7 +12,7 @@ brew install deno
 - `drive.ts` :
 - `probe.ts` :
 - `monitor.ts` :
-- `config/*.ts` :
+- `stubs/*.config.mjs` :
 
 ## Run
 

@@ -21,6 +21,11 @@ const resultsSchema = z.array(z.object({
     lengthExceeded: z.boolean(),
     moderated: z.boolean(),
   }),
+  // FIXME: replace any with Result, use MonitorActions
+  validator: z.function(
+    z.tuple([z.any(), z.record(z.string())]),
+    z.string().optional(),
+  ),
 }));
 
 function validateResults(results: unknown): Result[] {

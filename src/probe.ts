@@ -1,8 +1,9 @@
 import { convertMessagesToPrompt } from "#utils/convertMessagesToPrompt.ts";
-import { Output, Result } from "#types.ts";
+import { Config, Output, Result } from "#types.ts";
 
 export function probeChatCompletion(
   data: Output,
+  config: Config,
 ): Result {
   const { metadata: { prompt, input, repeat } } = data;
 
@@ -26,7 +27,10 @@ export function probeChatCompletion(
       // FIXME: remove non null assertion
       characters: data.completion.choices.at(0)!.message.content.length,
       lengthExceeded: data.completion.choices.at(0)!.finish_reason === "length",
-      moderated: /as an ai language model/i.test(data.completion.choices.at(0)!.message.content)
+      moderated: /as an ai language model/i.test(
+        data.completion.choices.at(0)!.message.content,
+      ),
     },
+    validator: config.validator,
   };
 }

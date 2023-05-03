@@ -2,19 +2,20 @@ import ProgressBar from "Progress";
 import { chunk } from "Lodash";
 import { driveChatCompletion } from "./drive.ts";
 import { probeChatCompletion } from "./probe.ts";
-import { Input, Prompt, Result } from "#types.ts";
+import { Config, Result } from "#types.ts";
 
 export async function simulateChatCompletion(
-  prompts: Prompt[],
-  inputs: Input[],
-  repeat: number,
+  config: Config,
 ): Promise<Result[]> {
-  const allCompletionRequests = prompts.flatMap(
+  console.log(123, { config });
+  const allCompletionRequests = config.prompts.flatMap(
     (prompt) => {
-      return inputs.flatMap((input) => {
-        return Array.from({ length: repeat }).fill(null).map((_, index) => {
-          return { prompt, input, repeat: index };
-        });
+      return config.inputs.flatMap((input) => {
+        return Array.from({ length: config.repeats }).fill(null).map(
+          (_, index) => {
+            return { prompt, input, repeat: index };
+          },
+        );
       });
     },
   );
@@ -38,8 +39,8 @@ export async function simulateChatCompletion(
 
     const reports = (await Promise.allSettled(
       chunk.map(async ({ prompt, input, repeat }) => {
-        const output = await driveChatCompletion(prompt, input, repeat)
-        const result = probeChatCompletion(output);
+        const output = await driveChatCompletion(prompt, input, repeat);
+        const result = probeChatCompletion(output, config);
         completed++;
         updateProgress();
         return result;

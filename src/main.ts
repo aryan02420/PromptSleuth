@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { Confirm } from "Cliffy";
 import { writeJSON } from "#utils/writeJSON.ts";
 import { simulateChatCompletion } from "./simulate.ts";
@@ -14,13 +15,9 @@ if (!configFile) {
   Deno.exit(1);
 }
 
-const testConfig = await loadConfig(configFile);
+const testConfig = await loadConfig(resolve(configFile));
 
-const result = await simulateChatCompletion(
-  testConfig.prompts,
-  testConfig.inputs,
-  testConfig.repeats,
-);
+const result = await simulateChatCompletion(testConfig);
 
 const totalTokens = result.reduce(
   (tokens, res) => tokens + res.metadata.tokens,

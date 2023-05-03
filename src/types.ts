@@ -10,12 +10,23 @@ export type CommonParams =
   | "presencePenalty"
   | "stop";
 
-export type ChatCompletionParams = Pick<ChatCompletionOptions, CommonParams>
+export type ChatCompletionParams = Pick<ChatCompletionOptions, CommonParams>;
 
 export type CompletionOptionPrompt = string;
 
 export type ChatCompletionOptionMessage =
   ChatCompletionOptions["messages"][number];
+
+export const MonitorActions = {
+  Skip: "⏩ Skip for now",
+  LooksGood: "✅ Looks good to me!",
+  TooLong: "⛔️ Too long",
+  BadFormat: "⛔️ Bad format",
+  GenericOutput: "⛔️ Generic output",
+  Moderated: "💀 Moderated",
+} as const;
+
+export type MonitorAction = typeof MonitorActions[keyof typeof MonitorActions];
 
 export type Prompt = {
   id: string;
@@ -33,6 +44,11 @@ export type Config = {
   prompts: Prompt[];
   inputs: Input[];
   repeats: number;
+  // FIXME: remove string from return type
+  validator: (
+    result: Result,
+    actions: typeof MonitorActions,
+  ) => MonitorAction | undefined | string;
 };
 
 export type Output = {
@@ -65,4 +81,5 @@ export type Result = {
     lengthExceeded: boolean;
     moderated: boolean;
   };
+  validator: Config["validator"];
 };

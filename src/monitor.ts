@@ -1,18 +1,10 @@
 import { dirname, resolve } from "path";
 import { chain, countBy, entries, shuffle, values } from "Lodash";
 import { Cell, Select, Table } from "Cliffy";
-import { Result } from "#types.ts";
+import { MonitorAction, MonitorActions, Result } from "#types.ts";
 import { writeJSON } from "#utils/writeJSON.ts";
 
-enum MonitorActions {
-  Skip = "⏩ Skip for now",
-  LooksGood = "✅ Looks good to me!",
-  TooLong = "⛔️ Too long",
-  BadFormat = "⛔️ Bad format",
-  GenericOutput = "⛔️ Generic output",
-  Moderated = "💀 Moderated",
-}
-type ResultWithAction = Result & { action: MonitorActions };
+type ResultWithAction = Result & { action: MonitorAction };
 
 export async function monitor(
   results: Result[],
@@ -32,11 +24,15 @@ export async function monitor(
         .body([
           [
             "Progress",
-            `Input: ${+inputIndex + 1}/${groupedByInput.length} Output: ${finalResults.length + 1}/${results.length}`,
+            `Input: ${+inputIndex + 1}/${groupedByInput.length} Output: ${
+              finalResults.length + 1
+            }/${results.length}`,
           ],
           ["Input", new Cell(result.input.text).border(true)],
           ["Output", new Cell(result.output.text).border(true)],
-          ...chain(result.metadata).entries().map(([key, value]) => [key, value.toString()]).value()
+          ...chain(result.metadata).entries().map((
+            [key, value],
+          ) => [key, value.toString()]).value(),
         ])
         .padding(1)
         .indent(2)
@@ -44,10 +40,12 @@ export async function monitor(
         .render();
       console.log();
 
+      const defaultAction = result.validator(result, MonitorActions);
       const action = (await Select.prompt({
         message: "Quality",
         options: values(MonitorActions),
-      })) as MonitorActions;
+        default: defaultAction,
+      })) as MonitorAction;
 
       switch (action) {
         case MonitorActions.Skip:
@@ -66,7 +64,9 @@ export async function monitor(
         .body([
           [
             "Progress",
-            `Input: ${inputIndex + 1}/${groupedByInput.length} Output: ${finalResults.length + 1}/${results.length}`,
+            `Input: ${inputIndex + 1}/${groupedByInput.length} Output: ${
+              finalResults.length + 1
+            }/${results.length}`,
           ],
           ["Input", new Cell(result.input.text).border(true)],
           ["Output", new Cell(result.output.text).border(true)],
@@ -82,7 +82,7 @@ export async function monitor(
         options: values(MonitorActions).filter((action) =>
           action !== MonitorActions.Skip
         ),
-      })) as MonitorActions;
+      })) as MonitorAction;
       finalResults.push({ ...result, action });
     }
 

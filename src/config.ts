@@ -25,6 +25,11 @@ const configSchema = z.object({
     fields: z.array(z.string()),
   })),
   repeats: z.number().int().min(1),
+  // FIXME: replace any with Result, use MonitorActions
+  validator: z.function(
+    z.tuple([z.any(), z.record(z.string())]),
+    z.string().optional(),
+  ),
 });
 
 type PartialConfig = z.infer<typeof configSchema>;
@@ -46,23 +51,6 @@ async function getRequiredConfig(config: PartialConfig): Promise<Config> {
 }
 
 export async function loadConfig(path: string): Promise<Config> {
-  const data = await Deno.readTextFile(path);
-  const config = JSON.parse(data);
+  const { default: config } = await import(path);
   return getRequiredConfig(validateConfig(config));
-}
-
-// generate schema is script is run directly
-if (import.meta.main) {
-  const { dirname, fromFileUrl, resolve } = await import("path");
-  const { zodToJsonSchema } = await import("ZodToJsonSchema");
-  const { writeJSON } = await import("#utils/writeJSON.ts");
-
-  // FIXME: super deep type makes editor slow :(
-  // @ts-ignore ^reason
-  // deno-lint-ignore no-explicit-any
-  const data: any = zodToJsonSchema(configSchema);
-  const basePath = dirname(fromFileUrl(import.meta.url));
-  writeJSON(resolve(basePath, "../stubs/schema.json"), data, {
-    showWritingMessage: true,
-  });
 }
