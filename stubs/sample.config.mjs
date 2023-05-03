@@ -48,11 +48,26 @@ export default {
     {
       fields: ["Universe"],
     },
+    {
+      fields: ["I am sorry, as an AI language model, I don't have feelings."],
+    },
   ],
-  repeats: 2,
-  validator: (result, actions) => {
-    if (/Hello \w+!/.test(result.output.text))
-      return actions.LooksGood;
-    return actions.BadFormat;
-  }
+  repeats: 1,
+  validator: (rawCompletion, metadata) => {
+    if (/Hello \w+!/.test(rawCompletion))
+      return "LooksGood";
+    // TODO: need to pass in the metadata to the validator
+    if (metadata.moderated)
+      return "Moderated";
+    return "BadFormat";
+  },
+  parser: (tokenStream) => {
+    let parsed = "";
+    while (true) {
+      const { done, value: token } = tokenStream.next();
+      if (done) break;
+      parsed += token;
+    }
+    return parsed;
+  },
 };

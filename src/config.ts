@@ -27,8 +27,13 @@ const configSchema = z.object({
   repeats: z.number().int().min(1),
   // FIXME: replace any with Result, use MonitorActions
   validator: z.function(
-    z.tuple([z.any(), z.record(z.string())]),
+    z.tuple([z.string(), z.record(z.any())]),
     z.string().optional(),
+  ),
+  // FIXME: replace any with Generator<>
+  parser: z.function(
+    z.tuple([z.any()]),
+    z.string().or(z.record(z.any())).or(z.array(z.any())),
   ),
 });
 

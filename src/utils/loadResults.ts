@@ -9,7 +9,8 @@ const resultsSchema = z.array(z.object({
   }),
   output: z.object({
     id: z.string(),
-    text: z.string(),
+    raw: z.string(),
+    parsed: z.string().or(z.record(z.any())).or(z.array(z.any())),
   }),
   prompt: z.object({
     id: z.string(),
@@ -22,10 +23,7 @@ const resultsSchema = z.array(z.object({
     moderated: z.boolean(),
   }),
   // FIXME: replace any with Result, use MonitorActions
-  validator: z.function(
-    z.tuple([z.any(), z.record(z.string())]),
-    z.string().optional(),
-  ),
+  action: z.string().optional(),
 }));
 
 function validateResults(results: unknown): Result[] {

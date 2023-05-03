@@ -1,4 +1,3 @@
-import { dirname, resolve } from "path";
 import { chain, countBy, entries, shuffle, values } from "Lodash";
 import { Cell, Select, Table } from "Cliffy";
 import { MonitorAction, MonitorActions, Result } from "#types.ts";
@@ -28,8 +27,17 @@ export async function monitor(
               finalResults.length + 1
             }/${results.length}`,
           ],
-          ["Input", new Cell(result.input.text).border(true)],
-          ["Output", new Cell(result.output.text).border(true)],
+          ["Input", new Cell(result.input.text).border(true).colSpan(2)],
+          [
+            "Output",
+            new Cell(result.output.raw).border(true),
+            new Cell(
+              typeof result.output.parsed === "object"
+                ? JSON.stringify(result.output.parsed, null, 2)
+                : result.output.parsed,
+            )
+              .border(true),
+          ],
           ...chain(result.metadata).entries().map((
             [key, value],
           ) => [key, value.toString()]).value(),
@@ -40,10 +48,13 @@ export async function monitor(
         .render();
       console.log();
 
-      const defaultAction = result.validator(result, MonitorActions);
+      const defaultAction = result.action;
       const action = (await Select.prompt({
         message: "Quality",
-        options: values(MonitorActions),
+        options: chain(MonitorActions).entries().map(([value, name]) => ({
+          value,
+          name,
+        })).value(),
         default: defaultAction,
       })) as MonitorAction;
 
@@ -68,8 +79,20 @@ export async function monitor(
               finalResults.length + 1
             }/${results.length}`,
           ],
-          ["Input", new Cell(result.input.text).border(true)],
-          ["Output", new Cell(result.output.text).border(true)],
+          ["Input", new Cell(result.input.text).border(true).colSpan(2)],
+          [
+            "Output",
+            new Cell(result.output.raw).border(true),
+            new Cell(
+              typeof result.output.parsed === "object"
+                ? JSON.stringify(result.output.parsed, null, 2)
+                : result.output.parsed,
+            )
+              .border(true),
+          ],
+          ...chain(result.metadata).entries().map((
+            [key, value],
+          ) => [key, value.toString()]).value(),
         ])
         .padding(1)
         .indent(2)
@@ -98,9 +121,9 @@ export async function monitor(
   const allCounts = chain(allResults)
     .flatMap((x) => x)
     .groupBy("prompt.id")
-    .mapValues((actionList) => ({
-      prompt: actionList[0].prompt,
-      counts: countBy(actionList, "action"),
+    .mapValues((result) => ({
+      prompt: result[0].prompt,
+      counts: countBy(result, "action"),
     }))
     .entries()
     .sortBy(([_, { counts }]) => -counts[MonitorActions.LooksGood])
@@ -114,11 +137,7 @@ export async function monitor(
     .header([
       "Prompt ID",
       "Prompt",
-      MonitorActions.LooksGood,
-      MonitorActions.TooLong,
-      MonitorActions.BadFormat,
-      MonitorActions.GenericOutput,
-      MonitorActions.Moderated,
+      ...values(MonitorActions).slice(1),
     ])
     .body(
       allCounts.map((
@@ -126,11 +145,8 @@ export async function monitor(
       ) => [
         id,
         prompt.text,
-        counts[MonitorActions.LooksGood] ?? 0,
-        counts[MonitorActions.TooLong] ?? 0,
-        counts[MonitorActions.BadFormat] ?? 0,
-        counts[MonitorActions.GenericOutput] ?? 0,
-        counts[MonitorActions.Moderated] ?? 0,
+        ...chain(MonitorActions).keys().slice(1).map((key) => counts[key] ?? 0)
+          .value(),
       ]),
     )
     .border(true)
@@ -138,20 +154,4 @@ export async function monitor(
     .indent(2)
     .maxColWidth(80)
     .render();
-}
-
-if (import.meta.main) {
-  const { loadResults } = await import("#utils/loadResults.ts");
-  const { parseArgs } = await import("./args.ts");
-
-  const args = parseArgs();
-  const inspectFile = args._[0];
-  if (!inspectFile) {
-    console.error(
-      "Please provide a path to a raw.json file",
-    );
-    Deno.exit(1);
-  }
-  const results = await loadResults(resolve(inspectFile));
-  await monitor(results, dirname(inspectFile));
 }

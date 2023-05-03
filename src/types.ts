@@ -22,6 +22,8 @@ export const MonitorActions = {
   LooksGood: "✅ Looks good to me!",
   TooLong: "⛔️ Too long",
   BadFormat: "⛔️ Bad format",
+  ExtraContent: "⛔️ Extra content",
+  CountError: "⛔️ Count error",
   GenericOutput: "⛔️ Generic output",
   Moderated: "💀 Moderated",
 } as const;
@@ -45,10 +47,13 @@ export type Config = {
   inputs: Input[];
   repeats: number;
   // FIXME: remove string from return type
+  // FIXME: replace any with Result.metadata type
   validator: (
-    result: Result,
-    actions: typeof MonitorActions,
-  ) => MonitorAction | undefined | string;
+    rawCompletion: string,
+    metadata: any,
+  ) => keyof typeof MonitorActions | undefined | string;
+  // deno-lint-ignore no-explicit-any
+  parser: (tokenStream: Generator<string, void, undefined>) => string | Record<string, any> | Array<any>;
 };
 
 export type Output = {
@@ -69,7 +74,9 @@ export type Result = {
   };
   output: {
     id: string;
-    text: string;
+    raw: string;
+    // deno-lint-ignore no-explicit-any
+    parsed: string | Record<string, any> | Array<any>;
   };
   prompt: {
     id: string;
@@ -81,5 +88,5 @@ export type Result = {
     lengthExceeded: boolean;
     moderated: boolean;
   };
-  validator: Config["validator"];
+  action?: keyof typeof MonitorActions | string | undefined;
 };
