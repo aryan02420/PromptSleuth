@@ -4,7 +4,7 @@ import { writeJSON } from "#utils/writeJSON.ts";
 import { loadResults } from "#utils/loadResults.ts";
 import { simulateChatCompletion } from "./simulate.ts";
 import { monitor } from "./monitor.ts";
-import { loadConfig } from "./config.ts";
+import { loadConfig } from "./utils/loadConfig.ts";
 import { parseArgs } from "./args.ts";
 
 const args = parseArgs();
