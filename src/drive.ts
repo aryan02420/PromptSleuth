@@ -1,9 +1,9 @@
 import { sprintf } from "fmt/printf.ts";
 import openai from "#utils/openai.ts";
-import { Input, Output, Prompt } from "#types.ts";
+import { Input, Output, OutputProcessor, Prompt } from "#types.ts";
 
 export async function driveChatCompletion(
-  prompt: Prompt,
+  prompt: Prompt & OutputProcessor,
   input: Input,
   repeat: number,
 ): Promise<Output> {
@@ -25,7 +25,7 @@ export async function driveChatCompletion(
   return {
     id: completion.id,
     completion,
-    metadata: {
+    for: {
       prompt,
       input,
       repeat,

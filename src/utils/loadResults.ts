@@ -1,8 +1,13 @@
 import { z } from "Zod";
-import { Result } from "#types.ts";
+import { values } from "Lodash";
+import { MonitorActions, Result } from "#types.ts";
 
 const resultsSchema = z.array(z.object({
   id: z.string(),
+  prompt: z.object({
+    id: z.string(),
+    text: z.string(),
+  }),
   input: z.object({
     id: z.string(),
     text: z.string(),
@@ -11,19 +16,14 @@ const resultsSchema = z.array(z.object({
     id: z.string(),
     raw: z.string(),
     parsed: z.string().or(z.record(z.any())).or(z.array(z.any())),
+    metadata: z.object({
+      tokens: z.number(),
+      characters: z.number(),
+      lengthExceeded: z.boolean(),
+      moderated: z.boolean(),
+    }),
   }),
-  prompt: z.object({
-    id: z.string(),
-    text: z.string(),
-  }),
-  metadata: z.object({
-    tokens: z.number(),
-    characters: z.number(),
-    lengthExceeded: z.boolean(),
-    moderated: z.boolean(),
-  }),
-  // FIXME: replace any with Result, use MonitorActions
-  action: z.string().optional(),
+  action: z.nativeEnum(MonitorActions),
 }));
 
 function validateResults(results: unknown): Result[] {

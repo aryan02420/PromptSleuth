@@ -36,7 +36,7 @@ const testConfig = await loadConfig(resolve(configFile));
 const result = await simulateChatCompletion(testConfig);
 
 const totalTokens = result.reduce(
-  (tokens, res) => tokens + res.metadata.tokens,
+  (tokens, res) => tokens + res.output.metadata.tokens,
   0,
 );
 const cost = totalTokens * 0.002 / 1000;

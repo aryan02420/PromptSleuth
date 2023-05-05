@@ -5,6 +5,20 @@ import { writeJSON } from "#utils/writeJSON.ts";
 
 type ResultWithAction = Result & { action: MonitorAction };
 
+const monitorActionName: Record<MonitorAction, string> = {
+  [MonitorActions.Skip]: "⏩ Skip for now",
+  [MonitorActions.Unknown]: "❔Unknown",
+  [MonitorActions.LooksGood]: "✅ Looks good to me!",
+  [MonitorActions.TooLong]: "⛔️ Too long",
+  [MonitorActions.BadFormat]: "⛔️ Bad format",
+  [MonitorActions.ExtraContent]: "⛔️ Extra content",
+  [MonitorActions.CountError]: "⛔️ Count error",
+  [MonitorActions.Inaccurate]: "⛔️ Inaccurate",
+  [MonitorActions.GenericOutput]: "⚠️ Generic output",
+  [MonitorActions.TooSlow]: "⚠️ Too Slow",
+  [MonitorActions.Moderated]: "💀 Moderated",
+} as const;
+
 export async function monitor(
   results: Result[],
   outDir: string,
@@ -38,7 +52,7 @@ export async function monitor(
             )
               .border(true),
           ],
-          ...chain(result.metadata).entries().map((
+          ...chain(result.output.metadata).entries().map((
             [key, value],
           ) => [key, value.toString()]).value(),
         ])
@@ -51,7 +65,7 @@ export async function monitor(
       const defaultAction = result.action;
       const action = (await Select.prompt({
         message: "Quality",
-        options: chain(MonitorActions).entries().map(([value, name]) => ({
+        options: chain(monitorActionName).entries().map(([value, name]) => ({
           value,
           name,
         })).value(),
@@ -90,7 +104,7 @@ export async function monitor(
             )
               .border(true),
           ],
-          ...chain(result.metadata).entries().map((
+          ...chain(result.output.metadata).entries().map((
             [key, value],
           ) => [key, value.toString()]).value(),
         ])
@@ -102,9 +116,10 @@ export async function monitor(
 
       const action = (await Select.prompt({
         message: "Quality",
-        options: values(MonitorActions).filter((action) =>
-          action !== MonitorActions.Skip
-        ),
+        options: chain(monitorActionName).entries().slice(1).map(([value, name]) => ({
+          value,
+          name,
+        })).value(),
       })) as MonitorAction;
       finalResults.push({ ...result, action });
     }
@@ -137,7 +152,7 @@ export async function monitor(
     .header([
       "Prompt ID",
       "Prompt",
-      ...values(MonitorActions).slice(1),
+      ...values(monitorActionName).slice(1),
     ])
     .body(
       allCounts.map((
@@ -145,7 +160,7 @@ export async function monitor(
       ) => [
         id,
         prompt.text,
-        ...chain(MonitorActions).keys().slice(1).map((key) => counts[key] ?? 0)
+        ...chain(monitorActionName).keys().slice(1).map((key) => counts[key] ?? 0)
           .value(),
       ]),
     )

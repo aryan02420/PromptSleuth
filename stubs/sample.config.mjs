@@ -1,3 +1,23 @@
+const genericValidator = (rawCompletion, metadata, actions) => {
+  if (/Hello \w+!/.test(rawCompletion))
+    return actions.LooksGood;
+  // TODO: need to pass in the metadata to the validator
+  if (metadata.moderated)
+    return actions.Moderated;
+  return actions.BadFormat;
+} 
+
+const genericParser = (tokenStream) => {
+  let parsed = "";
+  while (true) {
+    const { done, value: token } = tokenStream.next();
+    if (done) break;
+    parsed += token;
+  }
+  return parsed;
+}
+
+
 /** @type {import('#types.ts').Config} */
 export default {
   name: "Sample Config File",
@@ -24,6 +44,8 @@ export default {
         frequencyPenalty: 0,
         presencePenalty: 0,
       },
+      validator: genericValidator,
+      parser: genericParser,
     },
     {
       messages: [
@@ -39,6 +61,8 @@ export default {
         frequencyPenalty: 0,
         presencePenalty: 0,
       },
+      validator: genericValidator,
+      parser: genericParser,
     },
   ],
   inputs: [
@@ -53,21 +77,4 @@ export default {
     },
   ],
   repeats: 1,
-  validator: (rawCompletion, metadata) => {
-    if (/Hello \w+!/.test(rawCompletion))
-      return "LooksGood";
-    // TODO: need to pass in the metadata to the validator
-    if (metadata.moderated)
-      return "Moderated";
-    return "BadFormat";
-  },
-  parser: (tokenStream) => {
-    let parsed = "";
-    while (true) {
-      const { done, value: token } = tokenStream.next();
-      if (done) break;
-      parsed += token;
-    }
-    return parsed;
-  },
 };

@@ -19,22 +19,22 @@ const configSchema = z.object({
       presencePenalty: z.number().min(0).max(2).optional(),
       stop: z.union([z.string(), z.array(z.string())]).optional(),
     }),
+    // FIXME: use CompletionMetadata and MonitorActions instead of any
+    validator: z.function(
+      z.tuple([z.string(), z.record(z.any()), z.record(z.any())]),
+      z.string().optional(),
+    ),
+    // FIXME: replace any with Generator<>
+    parser: z.function(
+      z.tuple([z.any(), z.string()]),
+      z.string().or(z.record(z.any())).or(z.array(z.any())),
+    ),
   })),
   inputs: z.array(z.object({
     id: z.string().optional(),
     fields: z.array(z.string()),
   })),
   repeats: z.number().int().min(1),
-  // FIXME: replace any with Result, use MonitorActions
-  validator: z.function(
-    z.tuple([z.string(), z.record(z.any())]),
-    z.string().optional(),
-  ),
-  // FIXME: replace any with Generator<>
-  parser: z.function(
-    z.tuple([z.any()]),
-    z.string().or(z.record(z.any())).or(z.array(z.any())),
-  ),
 });
 
 type PartialConfig = z.infer<typeof configSchema>;

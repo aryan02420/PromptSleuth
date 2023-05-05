@@ -37,10 +37,11 @@ export async function simulateChatCompletion(
   for (const chunk of completionRequestsChunks) {
     const interval = setInterval(updateProgress, 100);
 
+    // TODO: save rejected promises in a separate file
     const reports = (await Promise.allSettled(
       chunk.map(async ({ prompt, input, repeat }) => {
         const output = await driveChatCompletion(prompt, input, repeat);
-        const result = probeChatCompletion(output, config);
+        const result = probeChatCompletion(output);
         completed++;
         updateProgress();
         return result;
