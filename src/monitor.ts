@@ -133,7 +133,7 @@ export async function monitor(
   });
 
   // FIXME: check if finalResults gets mutated here
-  const allCounts = chain(allResults)
+  const allCountsByPrompts = chain(allResults)
     .flatMap((x) => x)
     .groupBy("prompt.id")
     .mapValues((result) => ({
@@ -144,24 +144,66 @@ export async function monitor(
     .sortBy(([_, { counts }]) => -counts[MonitorActions.LooksGood])
     .value();
 
-  writeJSON(`${outDir}/results_easy.json`, allCounts, {
+  const allCountsByInputs = chain(allResults)
+    .flatMap((x) => x)
+    .groupBy("input.id")
+    .mapValues((result) => ({
+      input: result[0].input,
+      counts: countBy(result, "action"),
+    }))
+    .entries()
+    .sortBy(([_, { counts }]) => -counts[MonitorActions.LooksGood])
+    .value();
+
+  writeJSON(`${outDir}/results_prompts.json`, allCountsByPrompts, {
     showWritingMessage: true,
   });
+  writeJSON(`${outDir}/results_inputs.json`, allCountsByInputs, {
+    showWritingMessage: true,
+  });
+
+  const allActions = chain(allResults)
+    .flatMap((x) => x)
+    .countBy("action")
+    .entries()
+    .filter(([_, count]) => count > 0)
+    .map(([action, _]) => action)
+    .value();
 
   new Table()
     .header([
       "Prompt ID",
       "Prompt",
-      ...values(monitorActionName).slice(1),
+      ...allActions.map((key) => monitorActionName[key as MonitorAction] ?? key),
     ])
     .body(
-      allCounts.map((
+      allCountsByPrompts.map((
         [id, { prompt, counts }],
       ) => [
         id,
         prompt.text,
-        ...chain(monitorActionName).keys().slice(1).map((key) => counts[key] ?? 0)
-          .value(),
+        ...allActions.map((key) => counts[key] ?? 0),
+      ]),
+    )
+    .border(true)
+    .padding(1)
+    .indent(2)
+    .maxColWidth(80)
+    .render();
+
+  new Table()
+    .header([
+      "Input ID",
+      "Input",
+      ...allActions.map((key) => monitorActionName[key as MonitorAction] ?? key),
+    ])
+    .body(
+      allCountsByInputs.map((
+        [id, { input, counts }],
+      ) => [
+        id,
+        input.text,
+        ...allActions.map((key) => counts[key] ?? 0),
       ]),
     )
     .border(true)
