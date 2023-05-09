@@ -1,11 +1,13 @@
 const genericValidator = (rawCompletion, metadata, actions) => {
-  if (/Hello \w+!/.test(rawCompletion))
+  if (/Hello \w+!/.test(rawCompletion)) {
     return actions.LooksGood;
+  }
   // TODO: need to pass in the metadata to the validator
-  if (metadata.moderated)
+  if (metadata.moderated) {
     return actions.Moderated;
+  }
   return actions.BadFormat;
-} 
+};
 
 const genericParser = (tokenStream) => {
   let parsed = "";
@@ -15,8 +17,7 @@ const genericParser = (tokenStream) => {
     parsed += token;
   }
   return parsed;
-}
-
+};
 
 /** @type {import('#types.ts').Config} */
 export default {

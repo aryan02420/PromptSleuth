@@ -27,7 +27,7 @@ export function probeChatCompletion(
     characters: rawCompletion.length,
     lengthExceeded: data.completion.choices.at(0)!.finish_reason === "length",
     moderated: /as an ai language model/i.test(rawCompletion),
-  }
+  };
 
   const tokenStream = generateTokenStream(rawCompletion);
 

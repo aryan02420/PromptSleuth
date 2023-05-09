@@ -116,7 +116,9 @@ export async function monitor(
 
       const action = (await Select.prompt({
         message: "Quality",
-        options: chain(monitorActionName).entries().slice(1).map(([value, name]) => ({
+        options: chain(monitorActionName).entries().slice(1).map((
+          [value, name],
+        ) => ({
           value,
           name,
         })).value(),
@@ -174,7 +176,9 @@ export async function monitor(
     .header([
       "Prompt ID",
       "Prompt",
-      ...allActions.map((key) => monitorActionName[key as MonitorAction] ?? key),
+      ...allActions.map((key) =>
+        monitorActionName[key as MonitorAction] ?? key
+      ),
     ])
     .body(
       allCountsByPrompts.map((
@@ -195,7 +199,9 @@ export async function monitor(
     .header([
       "Input ID",
       "Input",
-      ...allActions.map((key) => monitorActionName[key as MonitorAction] ?? key),
+      ...allActions.map((key) =>
+        monitorActionName[key as MonitorAction] ?? key
+      ),
     ])
     .body(
       allCountsByInputs.map((

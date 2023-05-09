@@ -50,18 +50,18 @@ export type CompletionMetadata = {
   lengthExceeded: boolean;
   moderated: boolean;
   // time: number;
-}
+};
 
 export type OutputProcessor = {
   validator: (
     rawCompletion: string,
     completionMetadata: CompletionMetadata,
-    actions: typeof MonitorActions
+    actions: typeof MonitorActions,
   ) => MonitorAction;
   parser: (
     tokenStream: Generator<string, void, undefined>,
     rawCompletion: string,
-  // deno-lint-ignore no-explicit-any
+    // deno-lint-ignore no-explicit-any
   ) => string | Record<string, any> | Array<any>;
 };
 
