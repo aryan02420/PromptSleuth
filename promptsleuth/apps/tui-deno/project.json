@@ -12,7 +12,7 @@
       "options": {
         "main": "apps/tui-deno/src/main.ts",
         "outputFile": "dist/apps/tui-deno/main.js",
-        "denoConfig": "apps/tui-deno/deno.json"
+        "denoConfig": "apps/tui-deno/deno.jsonc"
       }
     },
     "serve": {
@@ -29,13 +29,13 @@
       ],
       "options": {
         "coverageDirectory": "coverage/apps/tui-deno",
-        "denoConfig": "apps/tui-deno/deno.json"
+        "denoConfig": "apps/tui-deno/deno.jsonc"
       }
     },
     "lint": {
       "executor": "@nx/deno:lint",
       "options": {
-        "denoConfig": "apps/tui-deno/deno.json"
+        "denoConfig": "apps/tui-deno/deno.jsonc"
       }
     }
   },

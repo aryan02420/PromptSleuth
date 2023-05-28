@@ -1,7 +1,7 @@
 import { chain, countBy, entries, shuffle, values } from "Lodash";
 import { Cell, Select, Table } from "Cliffy";
-import { MonitorAction, MonitorActions, Result } from "#types.ts";
-import { writeJSON } from "#utils/writeJSON.ts";
+import { MonitorAction, MonitorActions, Result } from "tui-deno/types.ts";
+import { writeJSON } from "tui-deno/utils/writeJSON.ts";
 
 type ResultWithAction = Result & { action: MonitorAction };
 

@@ -2,7 +2,7 @@ import ProgressBar from "Progress";
 import { chunk } from "Lodash";
 import { driveChatCompletion } from "./drive.ts";
 import { probeChatCompletion } from "./probe.ts";
-import { Config, Result } from "#types.ts";
+import { Config, Result } from "tui-deno/types.ts";
 
 export async function simulateChatCompletion(
   config: Config,

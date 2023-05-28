@@ -1,6 +1,6 @@
 import { z } from "Zod";
-import { stringID } from "#utils/stringID.ts";
-import { Config } from "#types.ts";
+import { stringID } from "tui-deno/utils/stringID.ts";
+import { Config } from "tui-deno/types.ts";
 
 const configSchema = z.object({
   $schema: z.string().optional(),
