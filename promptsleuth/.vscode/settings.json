@@ -1,7 +1,0 @@
-{
-  "deno.enablePaths": [
-    "apps/tui-deno"
-  ],
-  "deno.unstable": true,
-  "deno.importMap": "./import_map.json"
-}
