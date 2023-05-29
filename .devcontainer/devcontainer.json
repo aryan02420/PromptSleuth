@@ -1,0 +1,5 @@
+{
+	"name": "PromptSleuth",
+	"dockerFile": "Dockerfile",
+	"postCreateCommand": "yarn install"
+}
