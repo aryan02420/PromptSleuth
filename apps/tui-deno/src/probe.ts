@@ -1,6 +1,6 @@
 import { decode as _decode, encode as _encode } from "Tokenizer";
-import { convertMessagesToPrompt } from "#utils/convertMessagesToPrompt.ts";
-import { MonitorActions, Output, Result } from "#types.ts";
+import { convertMessagesToPrompt } from "tui-deno/utils/convertMessagesToPrompt.ts";
+import { MonitorActions, Output, Result } from "tui-deno/types.ts";
 
 function encode(text: string) {
   return _encode(text) as number[];

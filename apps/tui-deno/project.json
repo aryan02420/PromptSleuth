@@ -1,0 +1,43 @@
+{
+  "name": "tui-deno",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/tui-deno/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/deno:emit",
+      "outputs": [
+        "dist/apps/tui-deno"
+      ],
+      "options": {
+        "main": "apps/tui-deno/src/main.ts",
+        "outputFile": "dist/apps/tui-deno/main.js",
+        "denoConfig": "apps/tui-deno/deno.jsonc"
+      }
+    },
+    "serve": {
+      "executor": "@nx/deno:run",
+      "options": {
+        "buildTarget": "tui-deno:build",
+        "watch": true
+      }
+    },
+    "test": {
+      "executor": "@nx/deno:test",
+      "outputs": [
+        "coverage/apps/tui-deno"
+      ],
+      "options": {
+        "coverageDirectory": "coverage/apps/tui-deno",
+        "denoConfig": "apps/tui-deno/deno.jsonc"
+      }
+    },
+    "lint": {
+      "executor": "@nx/deno:lint",
+      "options": {
+        "denoConfig": "apps/tui-deno/deno.jsonc"
+      }
+    }
+  },
+  "tags": []
+}

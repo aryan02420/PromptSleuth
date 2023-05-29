@@ -1,7 +1,7 @@
 import { dirname, resolve } from "path";
 import { Confirm } from "Cliffy";
-import { writeJSON } from "#utils/writeJSON.ts";
-import { loadResults } from "#utils/loadResults.ts";
+import { writeJSON } from "tui-deno/utils/writeJSON.ts";
+import { loadResults } from "tui-deno/utils/loadResults.ts";
 import { simulateChatCompletion } from "./simulate.ts";
 import { monitor } from "./monitor.ts";
 import { loadConfig } from "./utils/loadConfig.ts";

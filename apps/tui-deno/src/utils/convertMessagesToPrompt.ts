@@ -1,4 +1,4 @@
-import { ChatCompletionOptionMessage, CompletionOptionPrompt } from "#types.ts";
+import { ChatCompletionOptionMessage, CompletionOptionPrompt } from "tui-deno/types.ts";
 
 export function convertMessagesToPrompt(
   messages: ChatCompletionOptionMessage[],

@@ -1,4 +1,4 @@
-import { CompletionOptionPrompt } from "#types.ts";
+import { CompletionOptionPrompt } from "tui-deno/types.ts";
 
 export function isSimplePrompt(
   prompt: CompletionOptionPrompt,

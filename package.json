@@ -1,0 +1,13 @@
+{
+  "name": "@promptsleuth/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/deno": "^16.2.0",
+    "@nx/workspace": "16.2.2",
+    "nx": "16.2.2"
+  }
+}

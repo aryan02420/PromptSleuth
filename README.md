@@ -1,21 +1,25 @@
 # PromptSleuth
 
-## Install
+
+## Setup
+
+### Check versions
 
 ```bash
-brew install deno
+$ node --version
+v20.2.0
+
+$ yarn --version
+1.22.19
+
+$ deno --version
+deno 1.34.0
+v8 11.5.150.1
+typescript 5.0.4
 ```
 
-## Develop
+### Install Dependencies
 
-- `smulate.ts` :
-- `drive.ts` :
-- `probe.ts` :
-- `monitor.ts` :
-- `stubs/*.config.mjs` :
-
-## Run
-
-```bash
-deno task main
+```
+yarn
 ```

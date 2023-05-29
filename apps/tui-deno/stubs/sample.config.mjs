@@ -19,7 +19,7 @@ const genericParser = (tokenStream) => {
   return parsed;
 };
 
-/** @type {import('#types.ts').Config} */
+/** @type {import('tui-deno/types.ts').Config} */
 export default {
   name: "Sample Config File",
   prompts: [

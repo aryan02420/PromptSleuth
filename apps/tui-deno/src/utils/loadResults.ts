@@ -1,6 +1,6 @@
 import { z } from "Zod";
 import { values } from "Lodash";
-import { MonitorActions, Result } from "#types.ts";
+import { MonitorActions, Result } from "tui-deno/types.ts";
 
 const resultsSchema = z.array(z.object({
   id: z.string(),

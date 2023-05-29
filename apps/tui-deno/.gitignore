@@ -1,0 +1,7 @@
+# Output
+.build
+
+# User specific
+stubs/**
+!stubs/sample.config.mjs
+output

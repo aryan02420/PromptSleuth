@@ -1,6 +1,6 @@
 import { sprintf } from "fmt/printf.ts";
-import openai from "#utils/openai.ts";
-import { Input, Output, OutputProcessor, Prompt } from "#types.ts";
+import openai from "tui-deno/utils/openai.ts";
+import { Input, Output, OutputProcessor, Prompt } from "tui-deno/types.ts";
 
 export async function driveChatCompletion(
   prompt: Prompt & OutputProcessor,
