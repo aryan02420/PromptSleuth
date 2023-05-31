@@ -1,4 +1,4 @@
-import { core } from './core';
+import { core } from './core.ts';
 
 describe('core', () => {
   it('should work', () => {

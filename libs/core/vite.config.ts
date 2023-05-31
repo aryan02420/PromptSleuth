@@ -1,9 +1,10 @@
 /// <reference types="vitest" />
+import pkg from '../../package.json';
 import { defineConfig } from 'vite';
 
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
-import { joinPathFragments } from '@nx/devkit';
+import nxDevkit from '@nx/devkit';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/core',
@@ -11,7 +12,7 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsConfigFilePath: joinPathFragments(__dirname, 'tsconfig.lib.json'),
+      tsConfigFilePath: nxDevkit.joinPathFragments(__dirname, 'tsconfig.lib.json'),
       skipDiagnostics: true,
     }),
 
@@ -36,14 +37,17 @@ export default defineConfig({
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
       name: 'core',
-      fileName: 'index',
+      fileName: '[name]',
       // Change this to the formats you want to support.
       // Don't forgot to update your package.json as well.
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: [],
+      external: Object.keys(pkg.dependencies),
+      output: {
+        preserveModules: true,
+      },
     },
   },
 
