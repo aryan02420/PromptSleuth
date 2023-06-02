@@ -11,21 +11,23 @@ export class Message extends Entity {
     this.#role = role;
     this.#content = content;
   }
-
-  set role(role: Role) {
-    this.#role = role;
-  }
-
+  
   get role() {
     return this.#role;
   }
-
-  set content(content: string) {
-    this.#content = content;
+  
+  set role(role: Role) {
+    this.#role = role;
+    this.update();
   }
 
   get content() {
     return this.#content;
+  }
+  
+  set content(content: string) {
+    this.#content = content;
+    this.update();
   }
 
   override toString() {
