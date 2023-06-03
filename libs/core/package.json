@@ -2,7 +2,7 @@
   "name": "@promptsleuth/core",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
-  "main": "index.js",
+  "type": "commonjs",
+  "module": "index.mjs",
   "types": "index.d.ts"
 }
