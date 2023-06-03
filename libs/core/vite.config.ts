@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import dts from 'vite-plugin-dts';
-import nxDevkit from '@nx/devkit';
+import { joinPathFragments } from '@nx/devkit';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/core',
@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsConfigFilePath: nxDevkit.joinPathFragments(__dirname, 'tsconfig.lib.json'),
+      tsConfigFilePath: joinPathFragments(__dirname, 'tsconfig.lib.json'),
       skipDiagnostics: true,
     }),
 
