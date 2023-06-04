@@ -3,42 +3,42 @@ import { Entity } from "./entity.ts";
 type Role = "system" | "user" | "assistant";
 
 export class Message extends Entity {
-  #role: Role;
-  #content: string;
+  private _role: Role;
+  private _content: string;
 
   constructor(role: Role, content: string) {
     super();
-    this.#role = role;
-    this.#content = content;
+    this._role = role;
+    this._content = content;
   }
   
   get role() {
-    return this.#role;
+    return this._role;
   }
   
   set role(role: Role) {
-    this.#role = role;
+    this._role = role;
     this.update();
   }
 
   get content() {
-    return this.#content;
+    return this._content;
   }
   
   set content(content: string) {
-    this.#content = content;
+    this._content = content;
     this.update();
   }
 
   override toString() {
-    return `${this.#role}: ${encodeURIComponent(this.#content)}`;
+    return `${this._role}: ${encodeURIComponent(this._content)}`;
   }
 
   override toJSON() {
     return {
       ...super.toJSON(),
-      role: this.#role,
-      content: this.#content,
+      role: this._role,
+      content: this._content,
     };
   }
 }

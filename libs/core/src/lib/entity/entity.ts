@@ -1,48 +1,48 @@
 import { ObjectId } from "bson";
 
 export class Entity {
-  #id: string;
-  #type: string;
-  #createdAt: string;
-  #updatedAt: string;
+  private _id: string;
+  private _type: string;
+  private _createdAt: string;
+  private _updatedAt: string;
 
   constructor() {
-    this.#createdAt = new Date().toISOString();
-    this.#id = new ObjectId().toHexString();
-    this.#type = this.constructor.name;
-    this.#updatedAt = this.#createdAt;
+    this._createdAt = new Date().toISOString();
+    this._id = new ObjectId().toHexString();
+    this._type = this.constructor.name;
+    this._updatedAt = this._createdAt;
   }
 
   get id() {
-    return this.#id;
+    return this._id;
   }
 
   get type() {
-    return this.#type;
+    return this._type;
   }
 
   get createdAt() {
-    return this.#createdAt;
+    return this._createdAt;
   }
 
   get updatedAt() {
-    return this.#updatedAt;
+    return this._updatedAt;
   }
 
   protected update() {
-    this.#updatedAt = new Date().toISOString();
+    this._updatedAt = new Date().toISOString();
   }
 
   toString(): string {
-    return `${this.#type}:${this.#id}`;
+    return `${this._type}:${this._id}`;
   }
 
   toJSON() {
     return {
-      _id: this.#id,
-      __typename: this.#type,
-      createdAt: this.#createdAt,
-      updatedAt: this.#updatedAt,
+      _id: this._id,
+      __typename: this._type,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
     };
   }
 }

@@ -3,47 +3,47 @@ import { Message } from './message.ts';
 import { Model } from './model.ts';
 
 export class Prompt extends Entity {
-  #model: Model;
-  #messages: Message[];
+  private _model: Model;
+  private _messages: Message[];
 
   constructor(model: Model) {
     super();
-    this.#model = model;
-    this.#messages = [];
+    this._model = model;
+    this._messages = [];
   }
   
   get model() {
-    return this.#model;
+    return this._model;
   }
 
   set model(model: Model) {
-    this.#model = model;
+    this._model = model;
     this.update();
   }
 
   get messages() {
-    return this.#messages;
+    return this._messages;
   }
 
   addMessage(message: Message) {
-    this.#messages.push(message);
+    this._messages.push(message);
     this.update();
   }
 
   removeMessage(message: Message) {
-    this.#messages = this.#messages.filter((m) => m !== message);
+    this._messages = this._messages.filter((m) => m !== message);
     this.update();
   }
 
   override toString() {
-    return `${this.#model.toString()}\n${this.#messages.map((message) => message.toString()).join("\n")}`;
+    return `${this._model.toString()}\n${this._messages.map((message) => message.toString()).join("\n")}`;
   }
 
   override toJSON() {
     return {
       ...super.toJSON(),
-      model: this.#model.toJSON(),
-      messages: this.#messages.map((message) => message.toJSON()),
+      model: this._model.toJSON(),
+      messages: this._messages.map((message) => message.toJSON()),
     };
   }
 }
