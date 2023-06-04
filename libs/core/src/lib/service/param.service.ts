@@ -1,6 +1,6 @@
-import { Param } from '../entity/index.ts';
+import { ParamEntity } from '../entity/index.ts';
 
-export class StringParam extends Param<string> {
+export class StringParam extends ParamEntity<string> {
   private _minLength: number;
   private _maxLength: number;
 
@@ -29,7 +29,7 @@ export class StringParam extends Param<string> {
   }
 }
 
-export class NumberParam extends Param<number> {
+export class NumberParam extends ParamEntity<number> {
   private _min: number;
   private _max: number;
 
@@ -62,7 +62,7 @@ export class NumberParam extends Param<number> {
   }
 }
 
-export class BooleanParam extends Param<boolean> {
+export class BooleanParam extends ParamEntity<boolean> {
   constructor(name: string, defaultValue: boolean) {
     super(name, defaultValue);
   }
@@ -81,7 +81,7 @@ export class BooleanParam extends Param<boolean> {
   }
 }
 
-export class ListParam extends Param<string[]> {
+export class ListParam extends ParamEntity<string[]> {
   private _listMinLength: number;
   private _listMaxLength: number;
   private _itemMinLength: number;

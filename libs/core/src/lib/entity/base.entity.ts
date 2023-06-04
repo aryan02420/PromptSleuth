@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 
-export class Entity {
+export class BaseEntity {
   private _id: string;
   private _type: string;
   private _createdAt: string;

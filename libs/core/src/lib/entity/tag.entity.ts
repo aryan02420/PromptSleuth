@@ -1,4 +1,4 @@
-import { Entity } from "./entity.ts";
+import { BaseEntity } from "./base.entity.js";
 
 type Category = "Perfect" | "Ok" | "Neutral" | "Bad";
 
@@ -9,7 +9,7 @@ const categoryIcon: Record<Category, string> = {
   Bad: "👎",
 } as const;
 
-export class Tag extends Entity {
+export class TagEntity extends BaseEntity {
   #name: string;
   #value: string;
   #category: Category;

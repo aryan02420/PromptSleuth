@@ -1,8 +1,8 @@
-import { Entity } from "./entity.ts";
+import { BaseEntity } from "./base.entity.js";
 
 type ParamType = string | number | boolean | string[];
 
-export class Param<TValue extends ParamType = ParamType> extends Entity {
+export class ParamEntity<TValue extends ParamType = ParamType> extends BaseEntity {
   private _name: string;
   private _defaultValue: TValue;
   private _value: TValue;

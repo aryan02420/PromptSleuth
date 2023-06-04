@@ -1,7 +1,7 @@
-import { Model } from '../entity/index.ts';
+import { ModelEntity } from '../entity/index.ts';
 import { NumberParam } from './param.service.ts';
 
-export class OpenAIChatGptThreeDotFiveTurboModel extends Model {
+export class OpenAIChatGptThreeDotFiveTurboModel extends ModelEntity {
   constructor() {
     super("openai-chat-gpt-3.5-turbo", [
       new NumberParam("temperature", 0.7, 0, 1),
@@ -13,7 +13,7 @@ export class OpenAIChatGptThreeDotFiveTurboModel extends Model {
   }
 }
 
-export class OpenAIChatGptFourModel extends Model {
+export class OpenAIChatGptFourModel extends ModelEntity {
   constructor() {
     super("openai-chat-gpt-4", [
       new NumberParam("temperature", 0.7, 0, 1),

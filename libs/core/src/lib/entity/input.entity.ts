@@ -1,6 +1,6 @@
-import { Entity } from "./entity.ts";
+import { BaseEntity } from "./base.entity.js";
 
-export class Input extends Entity {
+export class InputEntity extends BaseEntity {
   private _fields: string[];
 
   constructor(numberOfFields: number) {

@@ -1,12 +1,12 @@
-import { Entity } from "./entity.ts";
-import { Message } from './message.ts';
-import { Model } from './model.ts';
+import { BaseEntity } from "./base.entity.js";
+import { MessageEntity } from './message.entity.js';
+import { ModelEntity } from './model.entity.js';
 
-export class Prompt extends Entity {
-  private _model: Model;
-  private _messages: Message[];
+export class PromptEntity extends BaseEntity {
+  private _model: ModelEntity;
+  private _messages: MessageEntity[];
 
-  constructor(model: Model) {
+  constructor(model: ModelEntity) {
     super();
     this._model = model;
     this._messages = [];
@@ -16,7 +16,7 @@ export class Prompt extends Entity {
     return this._model;
   }
 
-  set model(model: Model) {
+  set model(model: ModelEntity) {
     this._model = model;
     this.update();
   }
@@ -25,12 +25,12 @@ export class Prompt extends Entity {
     return this._messages;
   }
 
-  addMessage(message: Message) {
+  addMessage(message: MessageEntity) {
     this._messages.push(message);
     this.update();
   }
 
-  removeMessage(message: Message) {
+  removeMessage(message: MessageEntity) {
     this._messages = this._messages.filter((m) => m !== message);
     this.update();
   }

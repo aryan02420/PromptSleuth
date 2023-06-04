@@ -1,8 +1,8 @@
-import { Entity } from "./entity.ts";
+import { BaseEntity } from "./base.entity.js";
 
 type Role = "system" | "user" | "assistant";
 
-export class Message extends Entity {
+export class MessageEntity extends BaseEntity {
   private _role: Role;
   private _content: string;
 
