@@ -10,7 +10,11 @@ export class StringParam extends ParamEntity<string> {
     this._maxLength = maxLength;
   }
 
-  override set value(value: unknown) {
+  override get value(): string {
+    return super.value as string;
+  }
+
+  override set value(value: string) {
     if (typeof value !== "string") {
       throw new Error("Value must be a string");
     }
@@ -39,11 +43,11 @@ export class NumberParam extends ParamEntity<number> {
     this._max = max;
   }
 
-  override get value() {
-    return super.value;
+  override get value(): number {
+    return super.value as number;
   }
 
-  override set value(value: unknown) {
+  override set value(value: number) {
     if (typeof value !== "number") {
       throw new Error("Value must be a number");
     }
@@ -67,7 +71,11 @@ export class BooleanParam extends ParamEntity<boolean> {
     super(name, defaultValue);
   }
 
-  override set value(value: unknown) {
+  override get value(): boolean {
+    return super.value as boolean;
+  }
+
+  override set value(value: boolean) {
     if (typeof value !== "boolean") {
       throw new Error("Value must be a boolean");
     }
@@ -95,7 +103,11 @@ export class ListParam extends ParamEntity<string[]> {
     this._itemMaxLength = itemMaxLength;
   }
 
-  override set value(value: unknown) {
+  override get value(): string[] {
+    return super.value as string[];
+  }
+
+  override set value(value: string[]) {
     if (!Array.isArray(value)) {
       throw new Error("Value must be an array");
     }
