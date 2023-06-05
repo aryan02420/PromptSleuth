@@ -10,6 +10,14 @@ export class StringParam extends ParamEntity<string> {
     this._maxLength = maxLength;
   }
 
+  get minLength() {
+    return this._minLength;
+  }
+
+  get maxLength() {
+    return this._maxLength;
+  }
+
   override get value(): string {
     return super.value as string;
   }
@@ -36,11 +44,25 @@ export class StringParam extends ParamEntity<string> {
 export class NumberParam extends ParamEntity<number> {
   private _min: number;
   private _max: number;
+  private _step: number;
 
-  constructor(name: string, defaultValue: number, min: number, max: number) {
+  constructor(name: string, defaultValue: number, min: number, max: number, step: number) {
     super(name, defaultValue);
     this._min = min;
     this._max = max;
+    this._step = step;
+  }
+
+  get min() {
+    return this._min;
+  }
+
+  get max() {
+    return this._max;
+  }
+
+  get step() {
+    return this._step;
   }
 
   override get value(): number {
@@ -101,6 +123,22 @@ export class ListParam extends ParamEntity<string[]> {
     this._listMaxLength = listMaxLength;
     this._itemMinLength = itemMinLength;
     this._itemMaxLength = itemMaxLength;
+  }
+
+  get listMinLength() {
+    return this._listMinLength;
+  }
+  
+  get listMaxLength() {
+    return this._listMaxLength;
+  }
+
+  get itemMinLength() {
+    return this._itemMinLength;
+  }
+
+  get itemMaxLength() {
+    return this._itemMaxLength;
   }
 
   override get value(): string[] {
