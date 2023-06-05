@@ -1,5 +1,3 @@
-import { ObjectId } from "bson";
-
 export class BaseEntity {
   private _id: string;
   private _type: string;
@@ -8,7 +6,7 @@ export class BaseEntity {
 
   constructor() {
     this._createdAt = new Date().toISOString();
-    this._id = new ObjectId().toHexString();
+    this._id = crypto.randomUUID();
     this._type = this.constructor.name;
     this._updatedAt = this._createdAt;
   }

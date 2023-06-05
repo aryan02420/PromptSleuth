@@ -6,8 +6,7 @@
   "private": true,
   "dependencies": {
     "@vue-reactivity/watch": "^0.2.0",
-    "@vue/reactivity": "^3.3.4",
-    "bson": "^5.3.0"
+    "@vue/reactivity": "^3.3.4"
   },
   "devDependencies": {
     "@nx/deno": "^16.2.0",
