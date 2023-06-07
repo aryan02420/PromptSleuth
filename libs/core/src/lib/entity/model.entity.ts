@@ -1,10 +1,10 @@
 import { BaseEntity } from "./base.entity.js";
 import { ParamEntity } from "./param.entity.js";
 
-export class ModelEntity<TParams extends ParamEntity[]> extends BaseEntity {
+export class ModelEntity<TParams extends readonly ParamEntity[] = readonly ParamEntity[]> extends BaseEntity {
   private _name: string;
   private _params: TParams;
-  private _paramMap: Map<string, ParamEntity>;
+  private _paramMap: Map<string, TParams[number]>;
 
   constructor(name: string, params: TParams) {
     super();
