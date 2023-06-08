@@ -1,4 +1,4 @@
-import { MessageEntity, PromptEntity } from '../entity/index.ts';
+import { MessageEntity, PromptEntity, TagEntity } from '../entity/index.ts';
 import { OpenAIChatGptFourModel, OpenAIChatGptThreeDotFiveTurboModel } from './model.service.ts';
 
 
@@ -20,15 +20,27 @@ export class Prompt extends PromptEntity<OpenAIChatGptThreeDotFiveTurboModel | O
   }
 
   addMessage() {
-    this._messages.push(new MessageEntity("user", ""));
+    this.messages.push(new MessageEntity("user", ""));
     this.update();
   }
 
   removeMessage(index: number) {
-    this._messages.splice(index, 1);
-    if (this._messages.length === 0) {
+    this.messages.splice(index, 1);
+    if (this.messages.length === 0) {
       this.addMessage();
     }
     this.update();
+  }
+
+  addTag(tag: TagEntity) {
+    this.tags.add(tag);
+  }
+
+  removeTag(tag: TagEntity) {
+    this.tags.delete(tag);
+  }
+
+  hasTag(id: string) {
+    return Array.from(this.tags).some((tag) => tag.id === id);
   }
 }

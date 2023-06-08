@@ -1,15 +1,18 @@
 import { BaseEntity } from "./base.entity.ts";
 import { MessageEntity } from './message.entity.ts';
 import { ModelEntity } from './model.entity.ts';
+import { TagEntity } from './tag.entity.ts';
 
 export class PromptEntity<TModel extends ModelEntity = ModelEntity> extends BaseEntity {
-  protected _model: TModel;
-  protected _messages: MessageEntity[];
+  private _model: TModel;
+  private _messages: MessageEntity[];
+  private _tags: Set<TagEntity>;
 
   constructor(model: TModel, messages: MessageEntity[]) { 
     super();
     this._model = model;
     this._messages = messages;
+    this._tags = new Set();
   }
   
   get model() {
@@ -28,6 +31,14 @@ export class PromptEntity<TModel extends ModelEntity = ModelEntity> extends Base
   set messages(messages: MessageEntity[]) {
     this._messages = messages;
     this.update();
+  }
+
+  get tags() {
+    return this._tags;
+  }
+
+  set tags(tags: Set<TagEntity>) {
+    this._tags = tags;
   }
 
   override toString() {
