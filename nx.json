@@ -34,5 +34,22 @@
     ],
     "sharedGlobals": []
   },
-  "plugins": ["@nx/deno"]
+  "plugins": ["@nx/deno"],
+  "generators": {
+    "@nx/react": {
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "eslint",
+        "bundler": "vite",
+        "babel": true
+      },
+      "component": {
+        "style": "@emotion/styled"
+      },
+      "library": {
+        "linter": "eslint",
+        "unitTestRunner": "vitest"
+      }
+    }
+  }
 }
