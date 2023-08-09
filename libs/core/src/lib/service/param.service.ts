@@ -4,8 +4,8 @@ export class StringParam extends ParamEntity<string> {
   private _minLength: number;
   private _maxLength: number;
 
-  constructor(name: string, defaultValue: string, minLength: number, maxLength: number) {
-    super(name, defaultValue);
+  constructor(name: string, description: string, defaultValue: string, minLength: number, maxLength: number) {
+    super(name, description, defaultValue);
     this._minLength = minLength;
     this._maxLength = maxLength;
   }
@@ -46,8 +46,8 @@ export class NumberParam extends ParamEntity<number> {
   private _max: number;
   private _step: number;
 
-  constructor(name: string, defaultValue: number, min: number, max: number, step: number) {
-    super(name, defaultValue);
+  constructor(name: string, description: string, defaultValue: number, min: number, max: number, step: number) {
+    super(name, description, defaultValue);
     this._min = min;
     this._max = max;
     this._step = step;
@@ -89,8 +89,8 @@ export class NumberParam extends ParamEntity<number> {
 }
 
 export class BooleanParam extends ParamEntity<boolean> {
-  constructor(name: string, defaultValue: boolean) {
-    super(name, defaultValue);
+  constructor(name: string, description: string, defaultValue: boolean) {
+    super(name, description, defaultValue);
   }
 
   override get value(): boolean {
@@ -117,8 +117,8 @@ export class ListParam extends ParamEntity<string[]> {
   private _itemMinLength: number;
   private _itemMaxLength: number;
 
-  constructor(name: string, defaultValue: string[], listMinLength: number, listMaxLength: number, itemMinLength: number, itemMaxLength: number) {
-    super(name, defaultValue);
+  constructor(name: string, description: string, defaultValue: string[], listMinLength: number, listMaxLength: number, itemMinLength: number, itemMaxLength: number) {
+    super(name, description, defaultValue);
     this._listMinLength = listMinLength;
     this._listMaxLength = listMaxLength;
     this._itemMinLength = itemMinLength;

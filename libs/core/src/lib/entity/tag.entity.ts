@@ -12,12 +12,14 @@ const categoryIcon: Record<Category, string> = {
 export class TagEntity extends BaseEntity {
   private _name: string;
   private _value: string;
+  private _description: string;
   private _category: Category;
 
-  constructor(name: string, value: string, category: Category) {
+  constructor(name: string, value: string, description: string, category: Category) {
     super();
     this._name = name;
     this._value = value;
+    this._description = description;
     this._category = category;
   }
   
@@ -39,6 +41,15 @@ export class TagEntity extends BaseEntity {
     this.update();
   }
 
+  get description() {
+    return this._description;
+  }
+
+  set description(description: string) {
+    this._description = description;
+    this.update();
+  }
+
   get category() {
     return this._category;
   }
@@ -57,6 +68,7 @@ export class TagEntity extends BaseEntity {
       ...super.toJSON(),
       name: this._name,
       value: this._value,
+      description: this._description,
       category: this._category,
     };
   }
