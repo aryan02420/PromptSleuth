@@ -1,6 +1,7 @@
 import { BaseEntity } from "./base.entity.js";
 
-type Role = "system" | "user" | "assistant";
+const availableRoles = ["system", "user", "assistant"] as const;
+type Role = typeof availableRoles[number];
 
 export class MessageEntity extends BaseEntity {
   private _role: Role;
@@ -10,6 +11,10 @@ export class MessageEntity extends BaseEntity {
     super();
     this._role = role;
     this._content = content;
+  }
+
+  get availableRoles() {
+    return availableRoles;
   }
   
   get role() {
