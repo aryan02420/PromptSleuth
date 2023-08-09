@@ -6,17 +6,20 @@ export class Prompt extends PromptEntity<OpenAIChatGptThreeDotFiveTurboModel | O
   private static _availableModels = [
     new OpenAIChatGptThreeDotFiveTurboModel(),
     new OpenAIChatGptFourModel(),
-  ];
+  ] as const;
 
   constructor() {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    super(Prompt._availableModels[0]!, [
+    super(Prompt._availableModels[0], [
       new MessageEntity("user", ""),
     ]);
   }
 
-  listModels() {
+  get availableModels() {
     return Prompt._availableModels;
+  }
+
+  getModel(name: string) {
+    return Prompt._availableModels.find((model) => model.name === name);
   }
 
   addMessage() {
