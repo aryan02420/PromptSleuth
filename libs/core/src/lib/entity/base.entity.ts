@@ -43,4 +43,40 @@ export class BaseEntity {
       updatedAt: this._updatedAt,
     };
   }
+
+  static fromJSON(json: ReturnType<BaseEntity["toJSON"]>) {
+    const entity = new BaseEntity();
+    entity._type = json.__typename;
+    entity._createdAt = json.createdAt;
+    entity._updatedAt = json.updatedAt;
+    return entity;
+  }
+
+  copy() {
+    const entity = new BaseEntity();
+    entity._type = this._type;
+    entity._createdAt = this._createdAt;
+    entity._updatedAt = this._updatedAt;
+    return entity;
+  }
+
+  clone() {
+    const entity = new BaseEntity();
+    entity._type = this._type;
+    entity._createdAt = this._createdAt;
+    entity._updatedAt = this._updatedAt;
+    return entity;
+  }
+
+  equals(entity: BaseEntity) {
+    return this._id === entity.id;
+  }
+
+  compare(entity: BaseEntity) {
+    return this._id.localeCompare(entity.id);
+  }
+
+  static isEntity(entity: unknown): entity is BaseEntity {
+    return entity instanceof BaseEntity;
+  }
 }

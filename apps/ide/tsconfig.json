@@ -6,7 +6,13 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "jsxImportSource": "@emotion/react",
-    "types": ["vite/client", "vitest"]
+    "types": ["vite/client", "vitest"],
+    "paths": {
+      "@promptsleuth/core": ["libs/core/src/index.ts"],
+      "@promptsleuth/ide": ["apps/ide/src"],
+      "@promptsleuth/ui-components/*": ["libs/ui-components/src/*"],
+      "@/*": ["apps/ide/src/*"]
+    }
   },
   "files": [],
   "include": [],

@@ -19,7 +19,7 @@
     "paths": {
       "@promptsleuth/core": ["libs/core/src/index.ts"],
       "@promptsleuth/ide": ["apps/ide/src"],
-      "@promptsleuth/ui-components": ["libs/ui-components/src/index.ts"]
+      "@promptsleuth/ui-components/*": ["libs/ui-components/src/*"],
     }
   },
   "exclude": ["node_modules", "tmp"]
