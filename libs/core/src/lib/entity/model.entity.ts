@@ -41,6 +41,10 @@ export class ModelEntity<TParams extends readonly ParamEntity[] = readonly Param
     this.update();
   }
 
+  generateCompletion(prompt: PromptEntity) {
+    throw new Error("Not implemented");
+  }
+
   override toString() {
     return `${this._name}:${this._params.map((param) => param.toString()).join("/")}`;
   }
