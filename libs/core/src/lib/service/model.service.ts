@@ -1,6 +1,14 @@
 import { ModelEntity } from '../entity/index.ts';
 import { NumberParam } from './param.service.ts';
 
+export class StupidModel extends ModelEntity<readonly [NumberParam]> {
+  constructor() {
+    super("stupid", "A very stupid model", [
+      new NumberParam("stupidness", "How stupid the model should be", 0, 0, 100, 1),
+    ] as const);
+  }
+}
+
 export class OpenAIChatGptThreeDotFiveTurboModel extends ModelEntity<readonly [NumberParam, NumberParam, NumberParam, NumberParam, NumberParam]> {
   constructor() {
     super("openai-chat-gpt-3.5-turbo", "Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. 4,096 tokens.	Up to Sep 2021.", [
